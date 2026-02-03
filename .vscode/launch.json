@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Flask",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "app.main",
+            "python": "${workspaceFolder}/backend/venv/bin/python",
+            "jinja": true,
+            "justMyCode": false,
+            "console": "internalConsole",
+            "cwd": "${workspaceFolder}/backend"
+        },
+        {
+            "name": "Python: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "python": "${workspaceFolder}/backend/venv/bin/python",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "cwd": "${workspaceFolder}/backend"
+        }
+    ]
+}
