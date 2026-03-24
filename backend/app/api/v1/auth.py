@@ -13,8 +13,6 @@ user_model = api.model("User", {
     "id": fields.Integer(description="User ID"),
     "email": fields.String(required=True, description="User email"),
     "username": fields.String(required=True, description="Username"),
-    "is_active": fields.Boolean(description="Active status"),
-    "is_superuser": fields.Boolean(description="Superuser status"),
     "created_at": fields.DateTime(description="Creation timestamp"),
     "updated_at": fields.DateTime(description="Update timestamp"),
 })
@@ -23,7 +21,6 @@ register_model = api.model("Register", {
     "email": fields.String(required=True, description="User email"),
     "username": fields.String(required=True, description="Username"),
     "password": fields.String(required=True, description="Password"),
-    "is_active": fields.Boolean(description="Active status", default=True),
 })
 
 login_model = api.model("Login", {
@@ -81,9 +78,6 @@ class Login(Resource):
         
         if not db_user or not verify_password(password, db_user.hashed_password):
             api.abort(401, "Incorrect username/email or password")
-        
-        if not db_user.is_active:
-            api.abort(400, "Inactive user")
         
         # Create access token
         access_token = create_access_token(identity=db_user.id)

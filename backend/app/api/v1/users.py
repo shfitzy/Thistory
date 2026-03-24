@@ -3,7 +3,7 @@ from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.user import User
 from app.crud import user as crud_user
-from app.api.deps import get_current_active_user
+from app.api.deps import get_current_user
 
 api = Namespace("users", description="User operations")
 
@@ -12,8 +12,6 @@ user_model = api.model("User", {
     "id": fields.Integer(description="User ID"),
     "email": fields.String(required=True, description="User email"),
     "username": fields.String(required=True, description="Username"),
-    "is_active": fields.Boolean(description="Active status"),
-    "is_superuser": fields.Boolean(description="Superuser status"),
     "created_at": fields.DateTime(description="Creation timestamp"),
     "updated_at": fields.DateTime(description="Update timestamp"),
 })
@@ -22,14 +20,12 @@ user_create_model = api.model("UserCreate", {
     "email": fields.String(required=True, description="User email"),
     "username": fields.String(required=True, description="Username"),
     "password": fields.String(required=True, description="Password"),
-    "is_active": fields.Boolean(description="Active status", default=True),
 })
 
 user_update_model = api.model("UserUpdate", {
     "email": fields.String(description="User email"),
     "username": fields.String(description="Username"),
     "password": fields.String(description="Password"),
-    "is_active": fields.Boolean(description="Active status"),
 })
 
 
@@ -40,7 +36,7 @@ class CurrentUser(Resource):
     @api.doc(security="Bearer")
     def get(self):
         """Get current user"""
-        user = get_current_active_user()
+        user = get_current_user()
         if not user:
             api.abort(401, "Invalid or missing token")
         return user
@@ -56,7 +52,7 @@ class UserList(Resource):
     })
     def get(self):
         """Get list of users"""
-        user = get_current_active_user()
+        user = get_current_user()
         if not user:
             api.abort(401, "Invalid or missing token")
         
@@ -72,7 +68,7 @@ class UserList(Resource):
     @api.doc(security="Bearer", responses={201: "User created", 400: "Email or username already exists"})
     def post(self):
         """Create a new user"""
-        current_user = get_current_active_user()
+        current_user = get_current_user()
         if not current_user:
             api.abort(401, "Invalid or missing token")
         
@@ -97,7 +93,7 @@ class UserResource(Resource):
     @api.doc(security="Bearer", responses={404: "User not found"})
     def get(self, user_id):
         """Get a user by ID"""
-        current_user = get_current_active_user()
+        current_user = get_current_user()
         if not current_user:
             api.abort(401, "Invalid or missing token")
         
@@ -112,13 +108,9 @@ class UserResource(Resource):
     @api.doc(security="Bearer", responses={403: "Not enough permissions", 404: "User not found"})
     def put(self, user_id):
         """Update a user"""
-        current_user = get_current_active_user()
+        current_user = get_current_user()
         if not current_user:
             api.abort(401, "Invalid or missing token")
-        
-        # Users can only update themselves unless they're superuser
-        if user_id != current_user.id and not current_user.is_superuser:
-            api.abort(403, "Not enough permissions")
         
         data = request.get_json()
         db_user = crud_user.update_user(user_id, data)
@@ -130,13 +122,9 @@ class UserResource(Resource):
     @api.doc(security="Bearer", responses={204: "User deleted", 403: "Not enough permissions", 404: "User not found"})
     def delete(self, user_id):
         """Delete a user"""
-        current_user = get_current_active_user()
+        current_user = get_current_user()
         if not current_user:
             api.abort(401, "Invalid or missing token")
-        
-        # Users can only delete themselves unless they're superuser
-        if user_id != current_user.id and not current_user.is_superuser:
-            api.abort(403, "Not enough permissions")
         
         success = crud_user.delete_user(user_id)
         if not success:

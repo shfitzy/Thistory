@@ -51,8 +51,6 @@ def update_user(user_id: int, user_data: dict) -> Optional[User]:
         db_user.username = user_data["username"]
     if "password" in user_data and user_data["password"] is not None:
         db_user.hashed_password = get_password_hash(user_data["password"])
-    if "is_active" in user_data and user_data["is_active"] is not None:
-        db_user.is_active = user_data["is_active"]
     
     db.session.commit()
     db.session.refresh(db_user)

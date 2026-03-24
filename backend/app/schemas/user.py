@@ -6,7 +6,6 @@ from pydantic import BaseModel, EmailStr
 class UserBase(BaseModel):
     email: EmailStr
     username: str
-    is_active: bool = True
 
 
 class UserCreate(UserBase):
@@ -17,13 +16,12 @@ class UserUpdate(BaseModel):
     email: Optional[EmailStr] = None
     username: Optional[str] = None
     password: Optional[str] = None
-    is_active: Optional[bool] = None
 
 
 class UserInDB(UserBase):
     id: int
     hashed_password: str
-    is_superuser: bool = False
+    is_admin: bool = False
     created_at: datetime
     updated_at: Optional[datetime] = None
 
@@ -33,7 +31,7 @@ class UserInDB(UserBase):
 
 class User(UserBase):
     id: int
-    is_superuser: bool = False
+    is_admin: bool = False
     created_at: datetime
     updated_at: Optional[datetime] = None
 
