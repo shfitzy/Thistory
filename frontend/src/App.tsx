@@ -12,6 +12,11 @@ import { EditProjectPage } from './pages/EditProjectPage';
 import { ProjectDetailPage } from './pages/ProjectDetailPage';
 import { ProjectSettingsPage } from './pages/ProjectSettingsPage';
 import { AdminPage } from './pages/AdminPage';
+import { EntityListPage } from './pages/EntityListPage';
+import { EntityDetailPage } from './pages/EntityDetailPage';
+import { CreateEntityPage } from './pages/CreateEntityPage';
+import { EditEntityPage } from './pages/EditEntityPage';
+import { TimelinePage } from './pages/TimelinePage';
 import { AuthProvider } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
@@ -90,6 +95,27 @@ function App() {
                   <AdminPage />
                 </ProtectedRoute>
               }
+            />
+            {/* Content entity routes */}
+            <Route
+              path="/projects/:projectId/:entityType"
+              element={<ProtectedRoute><EntityListPage /></ProtectedRoute>}
+            />
+            <Route
+              path="/projects/:projectId/:entityType/new"
+              element={<ProtectedRoute><CreateEntityPage /></ProtectedRoute>}
+            />
+            <Route
+              path="/projects/:projectId/:entityType/:entityId"
+              element={<ProtectedRoute><EntityDetailPage /></ProtectedRoute>}
+            />
+            <Route
+              path="/projects/:projectId/:entityType/:entityId/edit"
+              element={<ProtectedRoute><EditEntityPage /></ProtectedRoute>}
+            />
+            <Route
+              path="/projects/:projectId/timeline"
+              element={<ProtectedRoute><TimelinePage /></ProtectedRoute>}
             />
           </Routes>
         </BrowserRouter>

@@ -119,7 +119,7 @@ def test_get_project_api_unauthorized(client, app):
 
 
 def test_get_public_project_api(client, app):
-    """Test GET /api/v1/projects/{id} for public project (Story 2)"""
+    """Test GET /api/v1/projects/{id} — non-owner cannot access even public projects"""
     with app.app_context():
         owner = User(email="owner@example.com", username="owner", hashed_password="hashed")
         other_user = User(email="other@example.com", username="other", hashed_password="hashed")
@@ -143,7 +143,7 @@ def test_get_public_project_api(client, app):
             headers={'Authorization': f'Bearer {token}'}
         )
         
-        assert response.status_code == 200
+        assert response.status_code == 404
 
 
 def test_update_project_api(client, app):

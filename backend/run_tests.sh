@@ -16,14 +16,14 @@ fi
 
 # Install/update dependencies
 echo "📦 Installing dependencies..."
-pip install -r requirements.txt -q
+pip3 install -r requirements.txt -q
 
 echo ""
 echo "🧪 Running tests..."
 echo ""
 
 # Run pytest with coverage
-pytest tests/ -v --tb=short
+python3 -m pytest tests/ -v --tb=short
 
 echo ""
 echo "✅ Tests complete!"

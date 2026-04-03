@@ -14,6 +14,11 @@ from app.models.relationship import EntityRelationship
 from app.api.v1.auth import api as auth_api
 from app.api.v1.users import api as users_api
 from app.api.v1.projects import projects_bp, admin_bp
+from app.api.v1.locations import locations_bp
+from app.api.v1.races import races_bp
+from app.api.v1.characters import characters_bp
+from app.api.v1.events import events_bp
+from app.api.v1.relationships import relationships_bp
 from app.core.rate_limit import create_limiter
 from app.core.logging import setup_logging
 import os
@@ -60,6 +65,11 @@ def create_app(config_class=DevelopmentConfig):
     # Register blueprints
     app.register_blueprint(projects_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(locations_bp)
+    app.register_blueprint(races_bp)
+    app.register_blueprint(characters_bp)
+    app.register_blueprint(events_bp)
+    app.register_blueprint(relationships_bp)
     
     # Debug: Print all registered routes
     if app.config.get("DEBUG"):

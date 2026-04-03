@@ -1,4 +1,3 @@
-from datetime import datetime
 from app.database import db
 
 
@@ -11,9 +10,11 @@ class EntityRelationship(db.Model):
     from_entity_id = db.Column(db.Integer, nullable=False)
     to_entity_type = db.Column(db.String(50), nullable=False)
     to_entity_id = db.Column(db.Integer, nullable=False)
-    relationship_type = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text)
+    relationship_type = db.Column(db.String(100), nullable=True)
+    description = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), server_default=db.func.now())
+
+    project = db.relationship("Project", back_populates="entity_relationships")
 
     def __repr__(self):
         return f"<EntityRelationship {self.from_entity_type}:{self.from_entity_id} -> {self.to_entity_type}:{self.to_entity_id}>"

@@ -20,6 +20,7 @@ class Project(db.Model):
     races = db.relationship("Race", back_populates="project", cascade="all, delete-orphan")
     characters = db.relationship("Character", back_populates="project", cascade="all, delete-orphan")
     events = db.relationship("Event", back_populates="project", cascade="all, delete-orphan")
+    entity_relationships = db.relationship("EntityRelationship", back_populates="project", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Project {self.title}>"

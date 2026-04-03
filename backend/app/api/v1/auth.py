@@ -80,7 +80,7 @@ class Login(Resource):
             api.abort(401, "Incorrect username/email or password")
         
         # Create access token
-        access_token = create_access_token(identity=db_user.id)
+        access_token = create_access_token(identity=str(db_user.id))
         
         return {
             "access_token": access_token,
